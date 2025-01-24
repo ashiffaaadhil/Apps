@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Word Reader for Kids</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    .word {
+      font-size: 2em;
+      margin: 10px;
+      cursor: pointer;
+      display: inline-block;
+      padding: 10px 20px;
+      border: 2px solid #4CAF50;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      transition: background-color 0.3s ease;
+    }
+    .word:hover {
+      background-color: #d4edda;
+    }
+    #add-word-section {
+      margin-top: 30px;
+    }
+    input, button {
+      margin: 5px;
+      padding: 10px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Word Reader for Kids</h1>
+  <div id="words-container">
+    <!-- Words will be displayed here -->
+  </div>
+
+  <div id="add-word-section">
+    <h2>Add Words</h2>
+    <textarea id="word-input" placeholder="Enter words separated by commas" rows="3" cols="30"></textarea><br>
+    <button id="add-word-button">Add Words</button>
+  </div>
+
+  <script>
+    const wordsContainer = document.getElementById('words-container');
+    const wordInput = document.getElementById('word-input');
+    const addWordButton = document.getElementById('add-word-button');
+
+    // Function to create a word element and add it to the screen
+    function createWordElement(word) {
+      const wordElement = document.createElement('div');
+      wordElement.classList.add('word');
+      wordElement.textContent = word;
+
+      wordElement.addEventListener('click', () => {
+        // Use the Text-to-Speech API to read the word
+        const utterance = new SpeechSynthesisUtterance(word);
+        utterance.lang = 'en-US'; // Set language
+        window.speechSynthesis.speak(utterance);
+      });
+
+      wordsContainer.appendChild(wordElement);
+    }
+
+    // Function to handle adding words from the text box
+    addWordButton.addEventListener('click', () => {
+      const inputText = wordInput.value.trim();
+      if (inputText) {
+        // Split words by commas and trim spaces
+        const words = inputText.split(',').map(word => word.trim());
+        words.forEach(word => {
+          if (word) {
+            createWordElement(word);
+          }
+        });
+        wordInput.value = ''; // Clear the text area
+      } else {
+        alert('Please enter at least one word.');
+      }
+    });
+  </script>
+</body>
+</html>
